@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <h1 align="center">🌍 Voice Bridge(RTVT)</h1>
 <p align="center"><b>Instant, Intelligent, and Emotion-Preserved Speech Translation Across Languages</b></p>
 <hr>
@@ -126,3 +127,6 @@ RTVT proves that real-time, natural, and emotionally-aware voice translation is 
 
 <hr>
 
+=======
+# VoiceBridgeAI
+>>>>>>> 4c0496388c74a08329e802c494cbc96cf8d8ab7b
