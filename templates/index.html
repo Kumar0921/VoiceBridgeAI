@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Multilingual Translator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        select, button {
+            margin: 10px 0;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        select {
+            background-color: white;
+            color: #333;
+        }
+
+        button {
+            background-color: #ff7675;
+            color: white;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #d63031;
+            transform: scale(1.05);
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+    <script>
+        function startTranslation() {
+            let inputLang = document.getElementById("inputLang").value;
+            let outputLang = document.getElementById("outputLang").value;
+
+            fetch('/translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ input_lang: inputLang, output_lang: outputLang })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("recognized").innerText = "Recognized: " + data.recognized;
+                document.getElementById("translated").innerText = "Translated: " + data.translated;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function stopTranslation() {
+            fetch('/stop', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>🎙️ Real-Time Multilingual Speech Translator</h2>
+        <label>Input Language:</label>
+        <select id="inputLang">
+            {% for lang in languages %}
+            <option value="{{ lang }}">{{ lang }}</option>
+            {% endfor %}
+        </select>
+        
+        <label>Output Language:</label>
+        <select id="outputLang">
+            {% for lang in languages %}
+            <option value="{{ lang }}">{{ lang }}</option>
+            {% endfor %}
+        </select>
+
+        <button onclick="startTranslation()">Start Speaking</button>
+        <button onclick="stopTranslation()">Stop</button>
+
+        <p id="recognized">Recognized: </p>
+        <p id="translated">Translated: </p>
+    </div>
+</body>
+</html>
